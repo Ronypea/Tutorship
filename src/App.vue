@@ -44,7 +44,9 @@ export default {
 </script>
 
 <style>
+  @import url("https://fonts.googleapis.com/css?family=Comfortaa&display=swap");
   #app {
     background: #fafafa;
+    font-family: 'Comfortaa', cursive;
   }
 </style>
