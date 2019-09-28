@@ -1,6 +1,6 @@
 <template>
   <div id="meetings-list">
-    <div v-for="meeting of meetings"
+    <div v-for="meeting in meetings"
          v-bind:key="meeting._id"
          v-bind:class="['meeting', { active: currentMeetingId === meeting.id}]"
          v-on:click="currentMeetingId=meeting.id">

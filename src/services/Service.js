@@ -8,8 +8,11 @@ const authHeaders = () => ({
 })
 
 export default {
-  fetchRoute () {
-    return api().get('index', authHeaders())
+  getCities () {
+    return api().get('/get/cities', authHeaders())
+  },
+  profileInfo (params) {
+    return api().post('/get/user', params, authHeaders())
   },
   fetchPoint () {
     return api().get('pointinfo', authHeaders())
@@ -25,9 +28,6 @@ export default {
   },
   deleteLike (params) {
     return api().post('removeLike', params, authHeaders())
-  },
-  ProfileInfo () {
-    return api().get('profile', authHeaders())
   },
   EditProfile (params) {
     return api().post('/editprofile', params, authHeaders())
