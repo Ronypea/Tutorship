@@ -16,7 +16,7 @@ export default new Router({
       component: MainPage
     },
     {
-      path: '/fond/:id',
+      path: '/fond/:name',
       name: 'FondsInfo',
       component: FondsInfo
     },

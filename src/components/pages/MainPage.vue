@@ -108,7 +108,7 @@
                 <v-list-tile
                   v-for="(city, i) in cities"
                   :key="i"
-                  @click=""
+                  @click="chooseCity(city.name)"
                 >
                   <v-list-tile-title>{{ city.name }}</v-list-tile-title>
                 </v-list-tile>
@@ -124,6 +124,7 @@
 import MainLayout from '@/components/layouts/MainLayout'
 import LayoutAuthUs from '@/components/layouts/LayoutAuthUs'
 import {mapGetters} from 'vuex'
+import router from '../../router/index'
 
 export default {
   components: {
@@ -171,10 +172,8 @@ export default {
     ...mapGetters(['isAuthorized'])
   },
   methods: {
-    async getRoute() {
-      const response = await Service.fetchRoute();
-      this.Route = response.data.routes;
-      console.log(this.Route)
+    chooseCity (cityName) {
+      router.push({name: 'FondsInfo', params: {name: cityName}})
     }
   },
   mounted () {

@@ -41,8 +41,7 @@
   </div>
 </template>
 
-<script>
-  import ModalEditProfile from '@/components/components/modals/ModalEditProfile'
+<script>import ModalEditProfile from '@/components/components/modals/ModalEditProfile'
 import { mapActions, mapState } from 'vuex'
 export default {
   name: 'NavBarUs',
