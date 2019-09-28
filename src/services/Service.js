@@ -14,6 +14,12 @@ export default {
   profileInfo (params) {
     return api().post('/get/user', params, authHeaders())
   },
+  photoGallery (params) {
+    return api().post('get/photos', params, authHeaders())
+  },
+  mentorMeetings (params) {
+    return api().post('/get/meeting-by-mentor-id', params, authHeaders())
+  },
   // eslint-disable-next-line
   register ({username, password, password_repeated}) {
     return api().post(`register`, { username, password, password_repeated })

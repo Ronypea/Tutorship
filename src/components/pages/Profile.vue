@@ -3,35 +3,37 @@
     <v-content>
       <v-container fluid grid-list-md>
         <v-layout row wrap>
-          <v-flex xs12 sm12 md6 lg4 align-center justify-center>
-            <v-card class="Avatar">
-              <div class="title mb-1"> {{ user.name }} {{ user.surname }}</div>
-              <div class="subheading"> {{ user.role }}</div>
+          <v-flex xs12 sm12 md5 lg4 align-center justify-center>
+            <v-card style="padding: 10px; margin-left: 20px; margin-right: 40px" float>
+              <div class="title mb-1 Avatar"> {{ user.name }} {{ user.surname }}</div>
+              <div class="subheading Avatar"> {{ user.role }}</div>
               <v-img
-                src="https://scontent-yyz1-1.cdninstagram.com/vp/4cb48e816c23553396618d5fbce4cd16/5E3A2038/t51.2885-15/e35/61371739_2297866336970576_3936695332403802332_n.jpg?_nc_ht=scontent-yyz1-1.cdninstagram.com&_nc_cat=108"
-                max-width="200" max-height="300"></v-img>
-              <v-list-tile-content>
-                <v-list-tile-title> Возраст: {{ user.age }}</v-list-tile-title>
-                <v-list-tile-title> Учреждение: {{ user.workplace }}</v-list-tile-title>
-                <v-list-tile-title> E-mail: {{ user.email }}</v-list-tile-title>
-              </v-list-tile-content>
+                :src=user.avatar
+                max-width="800" max-height="400" position="center center"></v-img>
+              <v-card id="Portfolio">
+                <v-card-text> Возраст: {{ user.age }}</v-card-text>
+                <v-divider light></v-divider>
+                <v-card-text> Учреждение: {{ user.workplace }}</v-card-text>
+                <v-divider light></v-divider>
+                <v-card-text> E-mail: {{ user.email }}</v-card-text>
+              </v-card>
             </v-card>
           </v-flex>
-          <v-flex d-flex xs12 lg8>
+          <v-flex d-flex xs12 md12 lg8>
             <v-layout row wrap>
               <v-flex d-flex lg12 justify-center align-center>
-                <v-card>
-                  <v-card-text>Галерея</v-card-text>
+                <v-card class="Avatar">
+                  <div class="title mb-1" style="padding: 12px; background-color: lightgrey">Галерея</div>
                   <v-carousel
                     cycle
                     height="400"
-                    hide-delimiter-background
+                    hide-delimiters
                     show-arrows-on-hover
                   >
                     <v-carousel-item
                       v-for="(item, i) in albums"
                       :key="i"
-                      :src="item.src"
+                      :src="item.photo"
                       reverse-transition="fade-transition"
                       transition="fade-transition"
                     >
@@ -40,9 +42,9 @@
                 </v-card>
               </v-flex>
               <v-flex lg12>
-                <v-card>
-                  <v-card-title> Встречи</v-card-title>
-                  <meetings-list :meetings="Meetings"></meetings-list>
+                <v-card class="Avatar">
+                  <div class="title mb-1" style="padding: 12px; background-color: lightgrey"> Встречи</div>
+                  <meetings-list :meetings="meetings"></meetings-list>
                 </v-card>
               </v-flex>
             </v-layout>
@@ -62,45 +64,31 @@ export default {
   data() {
     return {
       user: {},
-      props: {id: '2'},
-      albums: [
-        {
-          src: 'https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg'
-        },
-        {
-          src: 'https://cdn.vuetifyjs.com/images/carousel/sky.jpg'
-        },
-        {
-          src: 'https://cdn.vuetifyjs.com/images/carousel/bird.jpg'
-        },
-        {
-          src: 'https://cdn.vuetifyjs.com/images/carousel/planet.jpg'
-        }
-      ],
-      // name: 'Вероника',
-      // surname: 'Плотникова',
-      // patronymic: 'Сергеевна',
-      // age: '20',
-      // city: 'Санкт-Петербург',
-      // email: 'Plotnikova99.99@gmail.com',
-      // character: 'Frontend разработчик',
-      // place: 'VK Hackathon',
-      // foto: 'https://i.pinimg.com/736x/70/ae/ed/70aeed769408dede74aaf1818bd3bb32.jpg',
-      // ],
-      Meetings: [
-        {id: 0, status: 'watching', data: '11/04/1999'},
-        {id: 1, status: 'checked', data: '12/04/1999'},
-        {id: 2, status: 'checked', data: '13/04/1999'},
-        {id: 3, status: 'refused', data: '14/04/1999'},
-        {id: 4, status: 'checked', data: '15/04/1999'}
-      ]
+      albums: {},
+      meetings: {},
+      props_info: {id: '2'},
+      props_photo: {user_id: '2'},
+      props_meeting: {mentor_id: '2'}
+      // Meetings: [
+      //   {id: 0, status: 'watching', data: '11/04/1999'},
+      //   {id: 1, status: 'checked', data: '12/04/1999'},
+      //   {id: 2, status: 'checked', data: '13/04/1999'},
+      //   {id: 3, status: 'refused', data: '14/04/1999'},
+      //   {id: 4, status: 'checked', data: '15/04/1999'}
+      // ]
     }
   },
   methods: {
     async insertData() {
-      const response = await Service.profileInfo(this.props)
-      this.user = response.data[0]
+      const response_info = await Service.profileInfo(this.props_info)
+      const response_photo = await Service.photoGallery(this.props_photo)
+      const response_meetings = await Service.mentorMeetings(this.props_meeting)
+      this.user = response_info.data[0]
+      this.albums = response_photo.data
+      this.meetings = response_meetings.data
       console.log(this.user)
+      console.log(this.albums)
+      console.log(this.meetings)
     }
   },
   mounted() {
@@ -122,6 +110,5 @@ export default {
 <style scoped>
   .Avatar {
     text-align: center;
-    font-weight: bold;
   }
 </style>
