@@ -94,8 +94,7 @@
         <v-flex lg12 d-flex row>
           <v-menu offset-y>
 
-              <v-btn flat slot="activator"
-                     dark x-large block color="secondary"
+              <v-btn x-large block color="secondary" dark flat slot="activator"
                      v-on="on"
               >
                 Выберите Ваш город
@@ -168,8 +167,8 @@ export default {
   },
   methods: {
     async getRoute() {
-      const response = await Service.fetchRoute()
-      this.Route = response.data.routes
+      const response = await Service.fetchRoute();
+      this.Route = response.data.routes;
       console.log(this.Route)
     }
   },
