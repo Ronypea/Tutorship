@@ -14,36 +14,6 @@ export default {
   profileInfo (params) {
     return api().post('/get/user', params, authHeaders())
   },
-  fetchPoint () {
-    return api().get('pointinfo', authHeaders())
-  },
-  addNewRoute (params) {
-    return api().post('/addroute', params, authHeaders())
-  },
-  getRoute ({ id }) {
-    return api().get(`route/${id}`, authHeaders())
-  },
-  setLike (params) {
-    return api().post('addlike', params, authHeaders())
-  },
-  deleteLike (params) {
-    return api().post('removeLike', params, authHeaders())
-  },
-  EditProfile (params) {
-    return api().post('/editprofile', params, authHeaders())
-  },
-  addNewPoint (params) {
-    return api().post('addpoint', params, authHeaders())
-  },
-  getPoint (params) {
-    return api().get(`posts/${params.id}`)
-  },
-  updatePoint (params) {
-    return api().put(`posts/${params.id}`, params)
-  },
-  deletePoint (id) {
-    return api().delete(`deletepoint/${id}`)
-  },
   // eslint-disable-next-line
   register ({username, password, password_repeated}) {
     return api().post(`register`, { username, password, password_repeated })
