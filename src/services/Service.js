@@ -14,12 +14,6 @@ export default {
   profileInfo (params) {
     return api().post('/get/user', params, authHeaders())
   },
-  fetchPoint () {
-    return api().get('pointinfo', authHeaders())
-  },
-  addNewRoute (params) {
-    return api().post('/addroute', params, authHeaders())
-  },
 
   // eslint-disable-next-line
   register ({username, password, password_repeated}) {
