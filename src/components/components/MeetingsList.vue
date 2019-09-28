@@ -1,9 +1,9 @@
 <template>
   <div id="meetings-list">
-    <div v-for="(meeting,index) in meetings"
-         v-bind:key="index">
-      v-bind:class="['meeting', { active: currentMeetingId === meeting.id}]"
-      v-on:click="currentMeetingId=meeting.id">
+    <div v-for="meeting of meetings"
+         v-bind:key="meeting._id"
+         v-bind:class="['meeting', { active: currentMeetingId === meeting.id}]"
+         v-on:click="currentMeetingId=meeting.id">
       <v-card hover>
         <v-card-title>
           <v-icon
@@ -43,15 +43,8 @@
 
 <script>export default {
   name: 'MeetingsList',
-  props: {
-    meetings: [
-      {id: 0, status: 'watching', data: '11/04/1999'},
-      {id: 1, status: 'checked', data: '12/04/1999'},
-      {id: 2, status: 'checked', data: '13/04/1999'},
-      {id: 3, status: 'refused', data: '14/04/1999'},
-      {id: 4, status: 'checked', data: '15/04/1999'}
-    ]
-  },
+  props: {meetings: Array},
+
   data: function () {
     return {
       currentMeetingId: undefined
