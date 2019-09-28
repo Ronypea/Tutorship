@@ -50,6 +50,7 @@
           <v-card-text>
             <v-icon
               large
+              color="yellow"
             >
               wb_sunny
             </v-icon>
@@ -58,6 +59,7 @@
             <v-spacer></v-spacer>
             <v-icon
               large
+              color="yellow"
             >
               wb_sunny
             </v-icon>
@@ -66,6 +68,7 @@
             <v-spacer></v-spacer>
             <v-icon
               large
+              color="yellow"
             >
               wb_sunny
             </v-icon>
@@ -74,6 +77,7 @@
             <v-spacer></v-spacer>
             <v-icon
               large
+              color="yellow"
             >
               wb_sunny
             </v-icon>
@@ -82,6 +86,7 @@
             <v-spacer></v-spacer>
             <v-icon
               large
+              color="yellow"
             >
               wb_sunny
             </v-icon>
