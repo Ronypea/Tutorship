@@ -18,7 +18,8 @@ export default new Router({
     {
       path: '/fond/:name',
       name: 'FondsInfo',
-      component: FondsInfo
+      component: FondsInfo,
+      props: true
     },
     {
       path: '/user',

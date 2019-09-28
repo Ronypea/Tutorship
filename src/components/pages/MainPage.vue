@@ -99,9 +99,7 @@
         <v-flex lg12 d-flex row>
           <v-menu offset-y>
 
-              <v-btn x-large block color="secondary" dark flat slot="activator"
-                     v-on="on"
-              >
+              <v-btn x-large block color="secondary" dark flat slot="activator">
                 Выберите Ваш город
               </v-btn>
               <v-list>
@@ -173,7 +171,7 @@ export default {
   },
   methods: {
     chooseCity (cityName) {
-      router.push({name: 'FondsInfo', params: {name: cityName}})
+      router.push({name: 'FondsInfo', params: {name: cityName}, props: {cityName}})
     }
   },
   mounted () {
