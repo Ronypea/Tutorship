@@ -99,17 +99,14 @@
         <v-flex lg12 d-flex row>
           <v-menu offset-y>
 
-              <v-btn flat slot="activator"
-                     dark x-large block color="secondary"
-                     v-on="on"
-              >
+              <v-btn x-large block color="secondary" dark flat slot="activator">
                 Выберите Ваш город
               </v-btn>
               <v-list>
                 <v-list-tile
                   v-for="(city, i) in cities"
                   :key="i"
-                  @click=""
+                  @click="chooseCity(city.name)"
                 >
                   <v-list-tile-title>{{ city.name }}</v-list-tile-title>
                 </v-list-tile>
@@ -125,6 +122,7 @@
 import MainLayout from '@/components/layouts/MainLayout'
 import LayoutAuthUs from '@/components/layouts/LayoutAuthUs'
 import {mapGetters} from 'vuex'
+import router from '../../router/index'
 
 export default {
   components: {
@@ -172,10 +170,8 @@ export default {
     ...mapGetters(['isAuthorized'])
   },
   methods: {
-    async getRoute() {
-      const response = await Service.fetchRoute()
-      this.Route = response.data.routes
-      console.log(this.Route)
+    chooseCity (cityName) {
+      router.push({name: 'FondsInfo', params: {name: cityName}, props: {cityName}})
     }
   },
   mounted () {

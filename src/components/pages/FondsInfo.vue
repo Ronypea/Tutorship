@@ -1,206 +1,161 @@
 <template>
-  <component :is="isAuthorized?'LayoutAuthUs':'MainLayout'">
-    <v-form style="margin: 2rem">
-      <v-content fluid>
-        <v-layout row wrap>
-          <v-flex d-flex xs8 sm8 md8>
-            <v-card flat style="background: #ffffff">
-              <div ref="map" style="width:100%; min-height: 100%;"></div>
-            </v-card>
-          </v-flex>
-          <v-flex d-flex xs4 sm4 md4>
-            <v-layout row wrap>
-              <v-flex d-flex>
-                <v-card style="background: #ffffff; margin: 2rem">
-                  <v-card-text>
-                    <v-layout row>
-                      <v-card-title class="headline">{{ Route.Name }}</v-card-title>
-                      <v-layout justify-end row>
-                        <v-list-tile
-                          :key="Route._id"
-                          v-on:click="addLike()"
-                          v-if="isAuthorized">
-                          <v-icon
-                            v-if="Like == 0"
-                            color="darkgrey"
-                          >
-                            favorite_border
-                          </v-icon>
-                          <v-icon
-                            v-else
-                            color="red darken-2"
-                          >
-                            favorite
-                          </v-icon>
-                          {{ Route.Likes }}
-                        </v-list-tile>
-                        <v-list-tile
-                          v-else>
-                          <v-icon
-                            color="red darken-2"
-                          >
-                            favorite
-                          </v-icon>
-                          {{ Route.Likes }}
-                        </v-list-tile>
-                      </v-layout>
-                    </v-layout>
-                    <v-list-tile-content>
-                      <v-list-tile-title><b>Город: </b>{{ Route.City }}</v-list-tile-title>
-                    </v-list-tile-content>
-                    <v-list-tile-content>
-                      <v-list-tile-title><b>Тип: </b>{{ Route.Type }}</v-list-tile-title>
-                    </v-list-tile-content>
-                    <v-list-tile-content>
-                      <v-list-tile-title><b>Дата: </b>{{ formatDate(Route.CreateDate) }}</v-list-tile-title>
-                    </v-list-tile-content>
-                    <v-card-actions>
-                      <v-list-tile class="grow">
-                        <v-list-tile-avatar color="grey darken-3">
-                          <v-img
-                            class="elevation-2"
-                            :src="`https://ui-avatars.com/api/?name=${Route.Author}`"
-                          ></v-img>
-                        </v-list-tile-avatar>
-                        <v-list-tile-content>
-                          <v-list-tile-title>{{ Route.Author }}</v-list-tile-title>
-                        </v-list-tile-content>
-                      </v-list-tile>
-                    </v-card-actions>
-                  </v-card-text>
-                </v-card>
-              </v-flex>
-              <v-flex d-flex>
-                <v-layout row wrap>
-                  <v-flex d-flex>
-                    <PointList :points="RoutePoints">
-                    </PointList>
-                  </v-flex>
-                </v-layout>
-              </v-flex>
-            </v-layout>
-          </v-flex>
-        </v-layout>
-        <v-layout row>
-          <v-flex d-flex xs8 sm8 md8>
-            <v-card style="margin-top: 1rem">
-              <v-card-text style="text-align: center">{{ Route.Disc }}</v-card-text>
-            </v-card>
-          </v-flex>
-        </v-layout>
-      </v-content>
-    </v-form>
-  </component>
+<component :is="isAuthorized?'LayoutAuthUs':'MainLayout'">
+  <v-content id="page">
+    <v-flex d-flex xs12 sm12 md12 lg12>
+      <v-card style="margin: 1rem">
+        <v-container fill-height fluid>
+          <v-layout align-center justify-centert>
+            <v-flex align-center flexbox lg12
+            v-for="info of infos">
+              <div v-if="city === info.name"
+                v-html="info.info"
+                ></div>
+            </v-flex>
+          </v-layout>
+        </v-container>
+      </v-card>
+    </v-flex>
+  </v-content>
+</component>
 </template>
 
 <script>import Service from '../../services/Service'
-import MainLayout from '../layouts/MainLayout'
-import LayoutAuthUs from '../layouts/LayoutAuthUs'
-import MapService from '../../services/MapService'
-import PointList from '../components/MeetingsList'
-import { mapGetters } from 'vuex'
-import moment from 'moment'
+import MainLayout from '@/components/layouts/MainLayout'
+import LayoutAuthUs from '@/components/layouts/LayoutAuthUs'
+import {mapGetters} from 'vuex'
+import router from '../../router/index'
+
 
 export default {
-  components: {MainLayout, PointList, LayoutAuthUs},
+  components: {
+    MainLayout,
+    LayoutAuthUs
+  },
+  props: ['name'],
   data () {
     return {
-      Route: {},
-      Coords: [],
-      RoutePoints: [],
-      Like: '',
-      selectedType: ''
-    }
-  },
-  methods: {
-    async getRoute () {
-      const response = await Service.getRoute({id: this.$route.params.id})
-      this.Route = response.data.route
-      let formattedPoints = []
-      for (let i = 0; i< response.data.routepoints.length; i++) {
-        formattedPoints.push({
-          id: response.data.routepoints[i]._id,
-          name: response.data.routepoints[i].Name,
-          type: response.data.routepoints[i].Type,
-          author: response.data.routepoints[i].Author,
-          disc: response.data.routepoints[i].Disc,
-          city: response.data.routepoints[i].City,
-          coordinateX: response.data.routepoints[i].CoordX,
-          coordinateY: response.data.routepoints[i].CoordY
-        })
-      }
-      this.RoutePoints = formattedPoints
-      this.Like = response.data.likecount
-      console.log(this.Like)
-      this.getCoords(this.RoutePoints)
-    },
-    getCoords (Points) {
-      var index, len
-      for (index = 0, len = Points.length; index < len; ++index) {
-        var coords = []
-        coords.push(Points[index].coordinateX)
-        coords.push(Points[index].coordinateY)
-        this.Coords.push(coords)
-      }
-    },
-    setupRoute () {
-      MapService.renderRoute(this.$refs.map, this.Coords)
-    },
-    async addLike () {
-      if (this.Like == 0){
-        await Service.setLike({
-          route: this.Route._id
-        })
-        this.Like += 1
-        this.Route.Likes += 1
-      }
-    },
-    formatDate (dateString, formatString = 'MMM Do YY') {
-      console.log(new Date(dateString))
-      return moment(new Date(dateString)).lang('ru').format('Do MMMM  YYYY')
-    }
-  },
-  mounted () {
-    this.getRoute()
-  },
-  watch: {
-    Route (newVal, oldVal) {
-      this.setupRoute()
+      city: this.name,
+      infos: [
+        {name: 'novosibirsk',
+          info: '<h1>Наставничество</h1>\n' +
+            '\n' +
+            '  <p><strong>Программа «Детский дом» направлена на индивидуальное сопровождение воспитанников детских домов в возрасте от 7 до 18 лет.</strong></p>\n' +
+            '  <p>Наставник — значимый взрослый в жизни ребенка, способный помочь, поддержать, способный принимать ребенка таким, какой он есть, видеть его немного иначе, чем воспитатели и другие сотрудники детского дома. Для ребенка важно, что кто-то общается с ним не потому, что это его работа, а потому, что он, ребенок, кому-то важен и интересен.</p>\n' +
+            '  <p>Программа реализуется с апреля 2014 года. Сейчас мы работаем с 4 детскими домами г. Красноярска. За 2016 г. вниманием наставников было охвачено 130 детей.</p>\n' +
+            '  <p><strong>Как это работает?</strong></p>\n' +
+            '  <p>Один взрослый навещает одного ребенка не реже, чем раз в неделю.</p>\n' +
+            '  <p>Чем они занимаются? Тем, что интересно им обоим, что помогает ребенку развиваться и узнавать мир, выражать свои переживания и мысли: играют в футбол, читают книжки, запускают воздушных змеев и смотрят фильмы, рисуют, гуляют, много разговаривают, шутят, балуются, разбирают задачки, дают советы… Живут!</p>\n' +
+            '  <p><strong>Как дети попадают в программу?</strong></p>\n' +
+            '  <p>Любой ребенок, находящийся в детском доме, может заполнить анкету и попросить найти ему старшего друга. Как правило, в первую очередь это дети, остро нуждающиеся в индивидуальном внимании. Возраст детей – от 7 до 18 лет.</p>\n' +
+            '  <p><strong>Как взрослые попадают в программу?</strong></p>\n' +
+            '  <p>Если вам от 18 (и вы закончили школу) до 60 лет, вы чувствуете в себе силы и желание общаться с ребенком, уверены, что найдете время еженедельно приезжать в детский дом, то вот вам алгоритм действий:</p>\n' +
+            '  <ol>\n' +
+            '    <li>Заполнить анкету на сайте.</li>\n' +
+            '    <li>Получить приглашение на тестирование.</li>\n' +
+            '    <li>По итогам тестирования получить приглашение на обучение.</li>\n' +
+            '    <li>Заказать справку об отсутствии судимости.</li>\n' +
+            '    <li>Пройти обучение.</li>\n' +
+            '    <li>Познакомиться с ребенком.</li>\n' +
+            '  </ol>\n' +
+            '  <p>Тестирование является обязательным условием включения волонтера в программу, поскольку работа с детьми-сиротами требует стабильности – эмоциональной и жизненной, готовности принимать другого и быть стрессоустойчивым.</p>\n' +
+            '  <p>Действующие наставники – самые разные люди: кто-то открыт и разговорчив, кто-то немного замкнут и больше любит слушать, кто-то прыгает с парашютом, а кто-то читает книжки. Но каждый для своего подопечного – тот самый, значимый взрослый, любимый старший друг, с которым вместе интересно и уютно!</p>\n' +
+            ' <p><strong>Что наставничество дает детям?</strong></p>\n' +
+            '  <ul>\n' +
+            '    <li>Опыт здоровых и безопасных отношений со взрослым – это поможет, если ребенок попадет в приемную семью: он будет более доверчив и открыт. Но и во взрослой самостоятельной жизни такой опыт – хорошее подспорье в выстраивании отношений, в том числе и семейных.</li>\n' +
+            '    <li>Уверенность в себе и своих силах.</li>\n' +
+            '    <li>Понимание своих границ и границ другого человека.</li>\n' +
+            '    <li>Умение делать выбор.</li>\n' +
+            '    <li>Новые стратегии выхода из конфликтных ситуаций.</li>\n' +
+            '    <li>Новые знания, навыки и умения – достаточно просто разговаривать с ребенком, чтобы он получал новую информацию.</li>\n' +
+            '    <li>Близкого человека, с которым можно поделиться самым важным.</li>\n' +
+            '    <li>Представление о будущем.</li>\n' +
+            '  </ul>\n' +
+            '  <p><strong>Что наставничество дает взрослым?</strong></p>\n' +
+            '  <ul>\n' +
+            '    <li>В вашей жизни появится еще один близкий человек.</li>\n' +
+            '    <li>Вы узнаете много нового не только о детях, но и о себе.</li>\n' +
+            '    <li>Вы сможете посетить интересные семинары и обучающие мероприятия.</li>\n' +
+            '    <li>Вы встретите много замечательных, интересных единомышленников.</li>\n' +
+            '  </ul>\n' +
+            '  <p>Вы сможете быть с ребенком здесь и сейчас.</p>\n' +
+            '  <p><strong>Почему это важно?</strong></p>\n' +
+            '  <p>В Красноярском крае около 3000 детей-сирот, к сожалению, не все они попадут в приемные семьи, но точно все они станут взрослыми, будут жить с нами в одном городе. Подростки, с которыми работают наставники и репетиторы, успешнее социализируются: могут жить самостоятельно, знают, как строить отношения с другими людьми, наставники помогают и с выбором будущей профессии, и с подготовкой к поступлению.</p>\n' +
+            '  <p>Статистика по выпускникам детских домов не утешительна:<br>• 10% сирот адаптируются к условиям современного мира,<br>• 40% становятся алкоголиками или наркоманами,<br>• 40% попадают в тюрьмы, связываются с преступной деятельностью,<br>• 10% заканчивают жизнь самоубийством.<br>• 90% не доживают до 40 лет.</p>\n' +
+            '  <p>То время, которое вы посвятите ребенку сегодня, поможет ему в будущем. Ждем всех желающих стать наставниками!</p>\n' +
+            '  <p style="text-align: center;"></p><div class="su-youtube su-u-responsive-media-yes"><iframe width="700" height="400" src="https://www.youtube.com/embed/KL0vZdMxCsY?" frameborder="0" allowfullscreen="true" title=""></iframe></div>\n' +
+            '\n'},
+        {
+          name: 'krasnoyarsk',
+          info: '<h1>Программа «Детский дом» ДБФ «Счастливые дети»</h1><p>Программа «Детский дом» направлена на индивидуальное сопровождение воспитанников детских домов\n' +
+            '  в возрасте от 7 до 18 лет.</p><p>Наставник — значимый взрослый в жизни ребенка, способный помочь, поддержать, способный принимать\n' +
+            '  ребенка таким, какой он есть, видеть его немного иначе, чем воспитатели и другие сотрудники\n' +
+            '  детского дома. Для ребенка важно, что кто-то общается с ним не потому, что это его работа,\n' +
+            '  а потому, что он, ребенок, кому-то важен и интересен.</p><p>Программа реализуется с апреля 2014 года. Сейчас мы работаем с 4 детскими домами г. Красноярска.\n' +
+            '  За 2017 г. вниманием наставников было охвачено 130 детей.</p><img class="ui image massive" src="/assets/about/img1-73b5de83dda8c06bcf5efa47dd246ff3070eeaa255fccb3c99348f91882e12b4.jpg" alt="Img1"><h3>Как это работает?</h3><p>Один взрослый навещает одного ребенка не реже, чем раз в неделю.</p><p>Чем они занимаются? Тем, что интересно им обоим, что помогает ребенку развиваться и узнавать мир,\n' +
+            '  выражать свои переживания и мысли: играют в футбол, читают книжки, запускают воздушных змеев и\n' +
+            '  смотрят фильмы, рисуют, гуляют, много разговаривают, шутят, балуются, разбирают задачки, дают советы… Живут!</p><h3>Как дети попадают в программу?</h3><p>Любой ребенок, находящийся в детском доме, может заполнить анкету и попросить найти ему старшего\n' +
+            '  друга. Как правило, в первую очередь это дети, остро нуждающиеся в индивидуальном внимании.\n' +
+            '  Возраст детей – от 7 до 18 лет.</p><img class="ui image massive" src="/assets/about/img2-8efba779091fdb830f8bafaf42f1a39cf40970d85842253ad8a5e7d4ea681fda.jpg" alt="Img2"><h3>Как взрослые попадают в программу?</h3><p>Если вам от 18 (и вы закончили школу) до 60 лет, вы чувствуете в себе силы и желание общаться с ребенком,\n' +
+            '  уверены, что найдете время еженедельно приезжать в детский дом, то вот вам алгоритм действий:</p><ol><li>Заполните анкету на сайте.</li><li>Получите приглашение на тестирование.</li><li>По итогам тестирования получите приглашение на обучение.</li><li>Закажите справку об отсутствии судимости.</li><li>Пройдите обучение.</li><li>Познакомьтесь с ребенком.</li></ol><p>Тестирование является обязательным условием включения волонтера в программу, поскольку работа\n' +
+            '  с детьми-сиротами требует стабильности – эмоциональной и жизненной, готовности принимать другого\n' +
+            '  и быть стрессоустойчивым.</p><p>Действующие наставники – самые разные люди: кто-то открыт и разговорчив, кто-то немного замкнут\n' +
+            '  и больше любит слушать, кто-то прыгает с парашютом, а кто-то читает книжки. Но каждый для своего\n' +
+            '  подопечного – тот самый, значимый взрослый, любимый старший друг, с которым вместе интересно и уютно!</p><img class="ui image massive" src="/assets/about/img3-d5df1adf77db0b36203d687ba8d9466e5bd7510c470515de1d4c91ad45aa6848.jpg" alt="Img3"><h3>Что наставничество дает детям?</h3><ul><li>Опыт здоровых и безопасных отношений со взрослым – это поможет, если ребенок попадет в\n' +
+            '  приемную семью: он будет более доверчив и открыт. Но и во взрослой самостоятельной жизни\n' +
+            '  такой опыт – хорошее подспорье в выстраивании отношений, в том числе и семейных.</li><li>Уверенность в себе и своих силах.</li><li>Понимание своих границ и границ другого человека.</li><li>Умение делать выбор.</li><li>Новые стратегии выхода из конфликтных ситуаций.</li><li>Новые знания, навыки и умения – достаточно просто разговаривать с ребенком, чтобы он получал новую информацию.</li><li>Близкого человека, с которым можно поделиться самым важным.</li><li>Представление о будущем.</li></ul><img class="ui image massive" src="/assets/about/img4-dbf19ce8ec6b9eb2478050b8dd6e4ef43ce629848c9b4809bed2d86f6cbe9f24.jpg" alt="Img4"><h3>Что наставничество дает взрослым?</h3><ul><li>В вашей жизни появится еще один близкий человек.</li><li>Вы узнаете много нового не только о детях, но и о себе.</li><li>Вы сможете посетить интересные семинары и обучающие мероприятия.</li><li>Вы встретите много замечательных, интересных единомышленников.</li><li>Вы сможете быть с ребенком здесь и сейчас.</li></ul><h3>Почему это важно?</h3><p>В Красноярском крае около 3000 детей-сирот, к сожалению, не все они попадут в приемные семьи,\n' +
+            '  но точно все они станут взрослыми, будут жить с нами в одном городе. Подростки, с которыми\n' +
+            '  работают наставники и репетиторы, успешнее социализируются: могут жить самостоятельно, знают,\n' +
+            '  как строить отношения с другими людьми, наставники помогают и с выбором будущей профессии, и с подготовкой к поступлению.</p><p>Статистика по выпускникам детских домов не утешительна:</p><ul><li>10% сирот адаптируются к условиям современного мира,</li><li>40% становятся алкоголиками или наркоманами,</li><li>40% попадают в тюрьмы, связываются с преступной деятельностью,</li><li>10% заканчивают жизнь самоубийством.</li><li>90% не доживают до 40 лет.</li></ul><p>То время, которое вы посвятите ребенку сегодня, поможет ему в будущем. Ждем всех желающих стать наставниками!</p></div><div class="flex"><div class="button_block btn-pink"><a href="/candidates/new">Заполнить анкету</a></div><div class="button_block btn-red"><a target="_blank" href="https://happydeti24.ru/campaign/detskijdom">Пожертвовать</a>\n'
+        }
+      ]
     }
   },
   computed: {
     ...mapGetters(['isAuthorized'])
-
+  },
+  methods: {
+  },
+  mounted () {
+    console.log('Props:', this.props);
   }
 }
-
 </script>
 
 <style scoped>
-  @import url('https://fonts.googleapis.com/css?family=Indie+Flower&display=swap');
+  @import url("https://fonts.googleapis.com/css?family=Comfortaa&display=swap");
 
-  #name {
-    text-align: left;
-    font-family: 'Indie Flower', cursive;
+  .header {
+    text-align: center;
+    font-family: 'Comfortaa', cursive;
     font-weight: bold;
-    background: #ffffff;
-    font-size: 22px;
-    margin-top: 20px;
+    /*background: rgba(205, 214, 219, 0.3);*/
+    font-size: xx-large;
   }
 
-  .name2 {
-    text-align: left;
-    font-family: 'Indie Flower', cursive;
+  .header2 {
+    text-align: center;
+    font-family: 'Comfortaa', cursive;
     font-weight: bold;
-    background: #ffffff;
-    font-size: 14px;
-    padding-left: 10px;
+    font-size: large;
+    /*background: rgba(205, 214, 219, 0.3);*/
   }
 
-  #RoutePreview {
-    padding: 15px;
+  #info {
+    height: 400px;
+    background-image: linear-gradient(rgba(205, 214, 219, 0.3), #5a6370), url(http://www.nastavnik54.ru/assets/main_page/bg2-e55106e310b40363fc8a0d52b951c42dc696226954c248af8beb8ac5d82653f3.jpg);
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-blend-mode: darken
+  }
+
+  #tutorship {
+    height: 500px;
+  }
+
+  #map {
     margin: 15px;
-    border: 1px solid;
+    top: 50%;
   }
 
   #search {
@@ -210,35 +165,7 @@ export default {
     background: white;
   }
 
-  #map {
-    margin-top: 30px;
-  }
-
-  h1 {
-    text-align: center;
-    font-family: 'Indie Flower', cursive;
-  }
-
   h3 {
-    font-family: 'Indie Flower', cursive;
+    font-family: 'Comfortaa', cursive;
   }
-
-  .routename {
-    padding-left: 20px;
-    color: orange;
-    position: relative;
-    top: 35px;
-  }
-
-  .routeinfo {
-    position: relative;
-    top: 45px;
-    left: 20px;
-  }
-
-  .like {
-    position: relative;
-    top: 50px;
-  }
-
 </style>
