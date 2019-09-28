@@ -15,41 +15,103 @@
           </v-container>
         </v-card>
       </v-flex>
-      <v-flex d-flex xs12 sm12 md12 lg12>
-        <v-card>
-          <v-container fluid>
-            <v-layout row align-center jusify-center wrap>
-              <v-card-title class="header">Что такое проект "Наставничество"?</v-card-title>
-            </v-layout>
-            <v-layout row wrap align-center justify-center>
-              <v-flex d-flex
-                      v-for="(item, index) in about"
-                      v-bind:key="index"
-                      xs6 lg3
-                      align-center justify-center>
-                <v-card height="350px" style="margin: 1rem; padding: 1rem">
-                  <v-card-title>
-                    <v-icon
-                      large
-                    >
-                      {{item.icon}}
-                    </v-icon>
+      <v-card>
+        <v-flex d-flex xs12 sm12 md12 lg12>
+          <v-card>
+            <v-card-title class="header">Что такое проект "Наставничество"?</v-card-title>
+            <v-container fluid grid-list-lg>
+              <v-layout wrap>
+                <v-flex d-flex
+                        v-for="(item, index) in about"
+                        v-bind:key="index"
+                        xs12 sm6 lg3>
+                  <v-card style="margin: 1rem; padding: 1rem">
+                    <v-card-title>
+                      <v-icon
+                        large
+                      >
+                        {{item.icon}}
+                      </v-icon>
+                      <v-divider light></v-divider>
+                      {{item.name}}
+                    </v-card-title>
                     <v-divider light></v-divider>
-                    {{item.name}}
-                  </v-card-title>
-                  <v-divider light></v-divider>
-                  <div class="h3">{{item.description}}</div>
-                </v-card>
-              </v-flex>
-            </v-layout>
-          </v-container>
-          <v-container fluid>
-            <v-layout row align-center jusify-center wrap>
-              <v-card-title class="header">Как это работает?</v-card-title>
-            </v-layout>
-          </v-container>
-        </v-card>
-      </v-flex>
+                    <v-spacer></v-spacer>
+                    <v-card-text class="h3">{{item.description}}</v-card-text>
+
+                  </v-card>
+                </v-flex>
+              </v-layout>
+            </v-container>
+          </v-card>
+        </v-flex>
+        <v-flex d-flex xs12 sm12 md10 lg10 row>
+          <v-card-title class="header">Как это работает?</v-card-title>
+          <v-card-text>
+            <v-icon
+              large
+            >
+              wb_sunny
+            </v-icon>
+            В рамках проекта у ребёнка появляется значимый взрослый – старший друг,
+            который будет искренне интересоваться его жизнью и поддерживать его.
+            <v-spacer></v-spacer>
+            <v-icon
+              large
+            >
+              wb_sunny
+            </v-icon>
+            В проекте участвуют подростки из детских домов от 12 лет, наставник должен
+            быть старше 24 лет.
+            <v-spacer></v-spacer>
+            <v-icon
+              large
+            >
+              wb_sunny
+            </v-icon>
+            После того, как взрослый заполняет анкету, проводится собеседование с
+            психологом для уточнения всех неясных моментов.
+            <v-spacer></v-spacer>
+            <v-icon
+              large
+            >
+              wb_sunny
+            </v-icon>
+            Далее кураторы проекта подбирают Наставнику ребенка, подходящего ему по
+            возрасту, полу, особенностям характера и поведения.
+            <v-spacer></v-spacer>
+            <v-icon
+              large
+            >
+              wb_sunny
+            </v-icon>
+            Да, иногда установить с ребёнком контакт бывает нелегко. У каждого из
+            них своя непростая история. Им трудно пустить кого-то в свой мир. Но
+            преодолеть этот барьер можно – в этом наставнику помогают психологи и
+            специалисты на групповых встречах и индивидуальных консультациях.
+          </v-card-text>
+        </v-flex>
+        <v-flex lg12 d-flex row>
+          <v-menu offset-y>
+
+              <v-btn flat slot="activator"
+                     dark x-large block color="secondary"
+                     v-on="on"
+              >
+                Выберите Ваш город
+              </v-btn>
+              <v-list>
+                <v-list-tile
+                  v-for="(city, i) in cities"
+                  :key="i"
+                  @click=""
+                >
+                  <v-list-tile-title>{{ city.name }}</v-list-tile-title>
+                </v-list-tile>
+              </v-list>
+          </v-menu>
+        </v-flex>
+      </v-card>
     </v-content>
   </component>
 </template>
@@ -58,6 +120,7 @@
 import MainLayout from '@/components/layouts/MainLayout'
 import LayoutAuthUs from '@/components/layouts/LayoutAuthUs'
 import {mapGetters} from 'vuex'
+
 export default {
   components: {
     MainLayout,
@@ -93,9 +156,10 @@ export default {
           description: 'В рамках проекта Наставничество проходят тематические встречи наставников, детей и кураторов проекта. Участвуя в проекте, вы попадаете в сообщество неравнодушных людей тех, кому #невсеравно. Всегда можно обратиться за советом к тем, кто давно общается с детьми и получить необходимую информацию'
         }
       ],
-      howitworks: [
-        {
-        }
+      cities: [
+        {name: 'novosibirsk'},
+        {name: 'kazan'},
+        {name: 'omsk'}
       ]
     }
   },
@@ -109,14 +173,14 @@ export default {
       console.log(this.Route)
     }
   },
-  mounted() {
-    this.getRoute()
+  mounted () {
   }
 }
 </script>
 
 <style scoped>
   @import url("https://fonts.googleapis.com/css?family=Comfortaa&display=swap");
+
   .header {
     text-align: center;
     font-family: 'Comfortaa', cursive;
@@ -124,6 +188,7 @@ export default {
     /*background: rgba(205, 214, 219, 0.3);*/
     font-size: xx-large;
   }
+
   .header2 {
     text-align: center;
     font-family: 'Comfortaa', cursive;
@@ -131,6 +196,7 @@ export default {
     font-size: large;
     /*background: rgba(205, 214, 219, 0.3);*/
   }
+
   #info {
     height: 400px;
     background-image: linear-gradient(rgba(205, 214, 219, 0.3), #5a6370), url(http://www.nastavnik54.ru/assets/main_page/bg2-e55106e310b40363fc8a0d52b951c42dc696226954c248af8beb8ac5d82653f3.jpg);
@@ -139,19 +205,23 @@ export default {
     background-size: cover;
     background-blend-mode: darken
   }
+
   #tutorship {
     height: 500px;
   }
+
   #map {
     margin: 15px;
     top: 50%;
   }
+
   #search {
     width: 50%;
     border: 1px solid;
     margin: 15px;
     background: white;
   }
+
   h3 {
     font-family: 'Comfortaa', cursive;
   }
