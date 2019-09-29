@@ -1,6 +1,5 @@
-# trip-planner
+# Tutorship
 
-> A Vue.js project is to create and search routes for walking
 
 ## Build Setup
 
