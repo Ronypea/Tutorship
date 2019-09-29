@@ -17,18 +17,18 @@
       <!--</v-list>-->
     <!--</v-navigation-drawer>-->
 
-    <v-toolbar>
+    <v-toolbar height="75px">
       <!--<v-toolbar-side-icon-->
         <!--class="hidden-md-and-up"-->
         <!--@click="drawer = !drawer"-->
       <!--&gt;</v-toolbar-side-icon>-->
-      <v-toolbar-title permanent>
+      <v-toolbar-title icon>
         <router-link
           to="/"
           tag="span"
           class="pointer"
         >
-          <a href="/"> <img class="logo" src="https://psv4.userapi.com/c848232/u14278459/docs/d12/9c253ba54a77/888.png?extra=lgc1mw6NvUxxVg0lsl4qRfkKvHmFVbMGeIr4c2QxSAXW3BnllLmixi5pMOILfd7uGjLElKCwhtEHxT1wT8RG3M2qu3jRpzpg1stwTt1yceWsg__kbIAouhOEhf61TZLmg1Qkg5cpqQ9fTxbSS5E9"> </a>
+          <img class="logo" src="https://psv4.userapi.com/c848232/u14278459/docs/d12/9c253ba54a77/888.png?extra=lgc1mw6NvUxxVg0lsl4qRfkKvHmFVbMGeIr4c2QxSAXW3BnllLmixi5pMOILfd7uGjLElKCwhtEHxT1wT8RG3M2qu3jRpzpg1stwTt1yceWsg__kbIAouhOEhf61TZLmg1Qkg5cpqQ9fTxbSS5E9">
         </router-link>
       </v-toolbar-title>
       <v-spacer></v-spacer>
@@ -76,8 +76,9 @@ export default {
     cursor: pointer
   }
   .logo {
-    width: 270px;
-    height: 50px;
+    max-width: 210px;
+    max-height: 71px;
+    margin: 1rem;
   }
   .button {
     margin: 5px;

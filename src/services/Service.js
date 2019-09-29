@@ -9,7 +9,7 @@ const authHeaders = () => ({
 
 export default {
   getCities () {
-    return api().get('/get/cities', authHeaders())
+    return api().get('/get/cities')
   },
   profileInfo (params) {
     return api().post('/get/user', params, authHeaders())

@@ -99,18 +99,18 @@
         <v-flex lg12 d-flex row>
           <v-menu offset-y>
 
-              <v-btn x-large block color="secondary" dark flat slot="activator">
-                Выберите Ваш город
-              </v-btn>
-              <v-list>
-                <v-list-tile
-                  v-for="(city, i) in cities"
-                  :key="i"
-                  @click="chooseCity(city.name)"
-                >
-                  <v-list-tile-title>{{ city.name }}</v-list-tile-title>
-                </v-list-tile>
-              </v-list>
+            <v-btn x-large block color="secondary" dark flat slot="activator">
+              Выберите Ваш город
+            </v-btn>
+            <v-list>
+              <v-list-tile
+                v-for="(city, i) in cities"
+                :key="i"
+                @click="chooseCity(city.name)"
+              >
+                <v-list-tile-title>{{ city.name }}</v-list-tile-title>
+              </v-list-tile>
+            </v-list>
           </v-menu>
         </v-flex>
       </v-card>
@@ -159,22 +159,26 @@ export default {
           description: 'В рамках проекта Наставничество проходят тематические встречи наставников, детей и кураторов проекта. Участвуя в проекте, вы попадаете в сообщество неравнодушных людей тех, кому #невсеравно. Всегда можно обратиться за советом к тем, кто давно общается с детьми и получить необходимую информацию'
         }
       ],
-      cities: [
-        {name: 'novosibirsk'},
-        {name: 'kazan'},
-        {name: 'omsk'}
-      ]
+      cities: []
     }
   },
   computed: {
     ...mapGetters(['isAuthorized'])
   },
   methods: {
-    chooseCity (cityName) {
+    chooseCity(cityName) {
       router.push({name: 'FondsInfo', params: {name: cityName}, props: {cityName}})
+    },
+    async insertData () {
+      const cities_response = await Service.getCities();
+      console.log(cities_response.data);
+      this.cities = cities_response.data;
+      console.log(this.cities)
     }
+
   },
   mounted () {
+    this.insertData()
   }
 }
 </script>
