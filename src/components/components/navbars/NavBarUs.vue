@@ -1,7 +1,7 @@
 <template>
   <div id="NavBarUs">
     <v-toolbar  height="75px">
-      <v-toolbar-side-icon>
+      <v-toolbar-title>
         <router-link
           to="/"
           tag="span"
@@ -9,7 +9,7 @@
         >
           <img  class="logo" src="https://psv4.userapi.com/c848232/u14278459/docs/d12/9c253ba54a77/888.png?extra=lgc1mw6NvUxxVg0lsl4qRfkKvHmFVbMGeIr4c2QxSAXW3BnllLmixi5pMOILfd7uGjLElKCwhtEHxT1wT8RG3M2qu3jRpzpg1stwTt1yceWsg__kbIAouhOEhf61TZLmg1Qkg5cpqQ9fTxbSS5E9" >
         </router-link>
-      </v-toolbar-side-icon>
+      </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-toolbar-items>
         <v-btn
@@ -74,8 +74,9 @@ export default {
     cursor: pointer
   }
   .logo {
-    width: 210px;
+    width: 170px;
     height: 71px;
+    padding: 5px;
   }
   .button {
     margin: 5px;

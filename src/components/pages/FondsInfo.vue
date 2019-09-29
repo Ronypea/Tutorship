@@ -1,5 +1,5 @@
 <template>
-<component :is="isAuthorized?'LayoutAuthUs':'MainLayout'">
+<component :is="isAuthorized?'LayoutAuthUs':'LayoutAuthUs'">
   <v-content id="page">
     <v-flex d-flex xs12 sm12 md12 lg12>
       <v-card style="margin: 1rem">
