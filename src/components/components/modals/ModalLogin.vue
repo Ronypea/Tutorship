@@ -1,7 +1,6 @@
 <template>
   <v-dialog width="400px" v-model="dialog">
     <v-btn outline large slot="activator">Логин</v-btn>
-
     <v-card>
       <v-container>
         <v-layout row>
