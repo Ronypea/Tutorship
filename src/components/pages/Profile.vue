@@ -44,6 +44,7 @@
               <v-flex lg12>
                 <v-card class="Avatar">
                   <div class="title mb-1" style="padding: 12px; background-color: lightgrey"> Встречи</div>
+                  <modal-create-meeting class="button"></modal-create-meeting>
                   <meetings-list :meetings="meetings"></meetings-list>
                 </v-card>
               </v-flex>
@@ -58,9 +59,10 @@
 <script> import LayoutAuthUs from '../layouts/LayoutAuthUs'
 import MeetingsList from '../components/MeetingsList'
 import Service from '../../services/Service'
+import ModalCreateMeeting from '../components/modals/ModalCreateMeeting'
 
 export default {
-  components: {LayoutAuthUs, MeetingsList},
+  components: {ModalCreateMeeting, LayoutAuthUs, MeetingsList},
   data() {
     return {
       user: {},
@@ -69,13 +71,6 @@ export default {
       props_info: {id: '2'},
       props_photo: {user_id: '2'},
       props_meeting: {mentor_id: '2'}
-      // Meetings: [
-      //   {id: 0, status: 'watching', data: '11/04/1999'},
-      //   {id: 1, status: 'checked', data: '12/04/1999'},
-      //   {id: 2, status: 'checked', data: '13/04/1999'},
-      //   {id: 3, status: 'refused', data: '14/04/1999'},
-      //   {id: 4, status: 'checked', data: '15/04/1999'}
-      // ]
     }
   },
   methods: {

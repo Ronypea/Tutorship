@@ -20,6 +20,12 @@ export default {
   mentorMeetings (params) {
     return api().post('/get/meeting-by-mentor-id', params, authHeaders())
   },
+  createMeeting (params) {
+    return api().post('/add/meeting', params, authHeaders())
+  },
+  getChildren (params) {
+    return api().post('/get/rels', params, authHeaders())
+  },
   // eslint-disable-next-line
   register ({username, password, password_repeated}) {
     return api().post(`register`, { username, password, password_repeated })
