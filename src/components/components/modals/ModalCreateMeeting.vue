@@ -28,7 +28,7 @@
                       <v-card-actions>
                         <v-spacer></v-spacer>
                         <v-btn flat @click="close()">Отмена</v-btn>
-                        <v-btn class="success" flat @click="onSave($refs)">Сохранить</v-btn>
+                        <v-btn class="success" flat @click="onSave()">Сохранить</v-btn>
                       </v-card-actions>
                     </v-flex>
                   </v-layout>
@@ -50,7 +50,7 @@ export default {
     return {
       picker: new Date().toISOString().substr(0, 10),
       meeting: {
-        date: '',
+        date: '2019-10-10',
         mentor_id: '2',
         child_id: '4',
         curator_id: '3'
@@ -67,9 +67,9 @@ export default {
       console.log('CHILDREN')
       console.log(this.children)
     },
-    async onSave(date) {
+    async onSave() {
       await Service.createMeeting({
-        date: date,
+        date: this.meeting.date,
         curator_id: this.meeting.curator_id,
         mentor_id: this.meeting.mentor_id,
         child_id: this.meeting.child_id

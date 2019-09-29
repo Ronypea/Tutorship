@@ -26,6 +26,9 @@ export default {
   getChildren (params) {
     return api().post('/get/rels', params, authHeaders())
   },
+  createReport (params) {
+    return api().post('add/report', params, authHeaders())
+  },
   // eslint-disable-next-line
   register ({username, password, password_repeated}) {
     return api().post(`register`, { username, password, password_repeated })
