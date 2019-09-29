@@ -5,12 +5,12 @@
       <v-card style="margin: 1rem">
         <v-container fill-height fluid>
           <v-layout align-center justify-centert>
-            <v-flex align-center flexbox lg12
-            v-for="info of infos">
+            <div
+            v-for="info in infos">
               <div v-if="city === info.name"
                 v-html="info.info"
                 ></div>
-            </v-flex>
+            </div>
           </v-layout>
         </v-container>
       </v-card>
